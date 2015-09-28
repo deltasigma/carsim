@@ -1,8 +1,8 @@
 name: CarSimApp
 account: deltasigma
 server: shinyapps.io
-bundleId: 275366
+bundleId: 276089
 url: https://deltasigma.shinyapps.io/CarSimApp
-when: 1443377794.24177
+when: 1443447129.76751
 asMultiple: FALSE
 asStatic: FALSE

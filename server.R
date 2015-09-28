@@ -23,15 +23,27 @@ shinyServer(function(input, output, session) {
         kmeans(selectedData(), input$clusters)
     })
     
-    # Prepare prediction dataframe 
-    cyl <- reactive({input$cyl})
-    hp <- reactive({input$hp})
-    wt <- reactive({input$wt/1000})
-    am <- reactive({input$am})
-    gear <- reactive({input$gear})
-    pred <- data.frame(c(cyl,hp,wt,am,gear))
+    # Prepare predictions 
+    estimateMPG <- reactive({
+        cyl <- input$cyl
+        hp <- input$hp
+        wt <- input$wt/1000
+        if(input$am == 'Automatic') {am <- 0} else {am <- 1}
+        gear <- input$gear
+        pred <- data.frame(cyl,hp,wt,am,gear)
+        predict(modelMPG, pred)
+    })
     
-    
+    estimateQSEC <- reactive({
+        cyl <- input$cyl
+        hp <- input$hp
+        wt <- input$wt/1000
+        if(input$am == 'Automatic') {am <- 0} else {am <- 1}
+        gear <- input$gear
+        pred <- data.frame(cyl,hp,wt,am,gear)
+        predict(modelQSEC, pred)
+    })
+        
     output$plot1 <- renderPlot({
         par(mar = c(5.1, 4.1, 0, 1))
         plot(selectedData(),
@@ -41,15 +53,11 @@ shinyServer(function(input, output, session) {
     })
     
     # Estimate MPG and QSEC
-    output$mpg_pred <- renderText({
-        paste('The simulated car fuel efficiency is ', predict(modelMPG, pred))
+    output$mpg_pred <- renderText({#estimateMPG()
+        paste(paste('The simulated car fuel efficiency is', estimateMPG()),'mpg')
     })
     
-    output$qsec_pred <- renderText({
-        paste('This car would do a 1/4 mile time of ', predict(modelQSEC, pred))
+    output$qsec_pred <- renderText({#estimateQSEC()
+        paste(paste('This car would do a 1/4 mile time of', estimateQSEC()),'seconds')
     })
-    
-    
-    
-    
 })
