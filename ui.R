@@ -17,9 +17,10 @@ shinyUI(fluidPage(
         car performance by using our regression based predictor'),
     
     tabsetPanel(
+        # This is the first tab on the app screen
         tabPanel("Performance",
             sidebarPanel(
-                selectInput('xcol', 'X Variable', names(cluster.dt)),
+                selectInput('xcol', 'X Variable', c('mpg')),
                 selectInput('ycol', 'Y Variable', names(cluster.dt),
                             selected=names(cluster.dt)[[2]]),
                 numericInput('clusters', 'Cluster count', 3,
@@ -29,6 +30,19 @@ shinyUI(fluidPage(
                 plotOutput('plot1')
             )
         ),
-        tabPanel("Prediction")
+        # This is the second tab on the screen
+        tabPanel("Prediction",
+                 sidebarPanel(
+                     # Variables in our model: cyl + hp + wt + am + gear
+                     numericInput('cyl','Cylinders',4, min = 2, max = 12),
+                     numericInput('hp','Horsepower',120, min = 25, max = 500),
+                     numericInput('wt','Weight',2500, min = 1000, max = 6000),
+                     numericInput('am','Transmission',0, min = 0, max = 1),
+                     numericInput('gear','Gears',4, min = 2, max = 8)
+                 ),
+                 mainPanel(
+                     verbatimTextOutput('mpg_pred'),
+                     verbatimTextOutput('qsec_pred')
+                     ))
     )
 ))
